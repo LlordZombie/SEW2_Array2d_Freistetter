@@ -1,5 +1,10 @@
 package arr2d;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
@@ -8,7 +13,7 @@ import java.util.stream.IntStream;
 
 public class Array2d {
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(getBox(sudokuFromString("...........5....9...4....1.2....3.5....7.....438...2......9.....1.4...6.........."), 4)));
+        testSudoku("sudokus.txt","output.txt");
     }
 
     public static boolean isMagicSquare(int[][] s) {
@@ -118,7 +123,33 @@ public class Array2d {
         return IntStream.rangeClosed(1, 9).noneMatch(i -> countNum(i, block) > 1);
     }
 
-    boolean isValidSudoku(int[][] s){
+    public static void testSudoku(String in, String out) {
+        File o = new File(out);
+        try {
+            o.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (FileOutputStream oFile = new FileOutputStream(o)) {
+            Object[] sudokuObjects = Files.readAllLines(Path.of(in)).toArray();
+            String[] sudokus = new String[sudokuObjects.length];
+            StringBuilder judged = new StringBuilder();
+            for (int i = 0; i < sudokus.length; i++) {
+                if (isValidSudoku(sudokuFromString(String.valueOf(sudokuObjects[i])))) {
+                    judged.append(sudokuObjects[i]).append(": gültig\n");
+                } else {
+                    judged.append(sudokuObjects[i]).append(": nicht gültig\n");
+                }
+            }
+            oFile.write(judged.toString().getBytes());
 
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Path is not valid");
+        }
+
+    }
+
+    public static boolean isValidSudoku(int[][] s) {
+        return IntStream.range(0, 9).allMatch(i -> isValid(getBox(s, i)) && isValid(getColumn(s, i)) && isValid(getLine(s, i)));
     }
 }
