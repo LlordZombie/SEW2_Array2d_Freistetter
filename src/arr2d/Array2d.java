@@ -7,14 +7,13 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 public class Array2d {
     public static void main(String[] args) {
         testSudoku("sudokus.txt", "output.txt");
         System.out.println("isMagicSquare(new int[][]{{4, 9, 2},{3, 5 ,7},{8, 1, 6}}) = " + isMagicSquare(new int[][]{{4, 9, 2}, {3, 5, 7}, {8, 1, 6}}));
-        printMonth(2024,1);
+        printMonth(2024, 1);
         printYear(2024);
         printSudoku(sudokuFromString("...........5....9...4....1.2....3.5....7.....438...2......9.....1.4...6.........."));
     }
@@ -48,8 +47,8 @@ public class Array2d {
 
     public static void printMonth(int year, int month) {
         LocalDate date = LocalDate.of(year, month, 1);
-        String headerFormat = "%" + ((21 - (Month.values()[date.getMonth().getValue()-1].name().length() + 5)) / 2 + Month.values()[date.getMonth().getValue()-1].name().length() + 5) + "s%n Mo Di Mi Do Fr Sa So%n";
-        System.out.printf(headerFormat, Month.values()[date.getMonth().getValue()-1].name() + " " + year);
+        String headerFormat = "%" + ((21 - (Month.values()[date.getMonth().getValue() - 1].name().length() + 5)) / 2 + Month.values()[date.getMonth().getValue() - 1].name().length() + 5) + "s%n Mo Di Mi Do Fr Sa So%n";
+        System.out.printf(headerFormat, Month.values()[date.getMonth().getValue() - 1].name() + " " + year);
         Arrays.stream(getCalendarOfMonth(year, month)).forEach(week -> {
             printWeek(week);
             System.out.println();
@@ -61,25 +60,23 @@ public class Array2d {
     }
 
     public static void printYear(int year) {
-        AtomicReference<String> format = new AtomicReference<>("%" + ((65 - String.valueOf(year).length()) / 2 + String.valueOf(year).length()) + "d");
-        System.out.printf(format.get(), year);
-        LocalDate[][] months = IntStream.range(0, 4).mapToObj(i -> IntStream.range(0, 3).mapToObj(j -> LocalDate.of(year, (i * 3 + j) % 12 + 1, 1)).toArray(LocalDate[]::new)).toArray(LocalDate[][]::new);
-        IntStream.range(0, 4).forEach(i -> {
-            System.out.println();
-            IntStream.range(0, 3).forEach(j -> {
-                int currentLen = (22 - Month.values()[months[i][j].getMonthValue() - 1].name().length()) / 2 + Month.values()[months[i][j].getMonthValue() - 1].name().length();
-                format.set("%" + currentLen + "s%" + (22 - currentLen) + "s");
-                System.out.printf(format.get(), Month.values()[months[i][j].getMonthValue() - 1].name(), " ");
-            });
-            System.out.println();
-            System.out.println(" Mo Di Mi Do Fr Sa So  Mo Di Mi Do Fr Sa So  Mo Di Mi Do Fr Sa So");
-            IntStream.range(0, 6).forEach(j -> {
-                IntStream.range(0, 3).forEach(k -> {
-                    printWeek(getCalendarOfMonth(months[i][k].getYear(), months[i][k].getMonthValue())[j]);
-                    System.out.print(" ");
+        System.out.println(year);
+        IntStream.range(0, 4).forEach(startmonth -> {
+            IntStream.range(0, 8).forEach(i -> {
+                IntStream.range(0, 3).forEach(month -> {
+                    int[][] cal = getCalendarOfMonth(year, (startmonth * 3 + month) % 12 + 1);
+                    if (i == 0) {
+                        System.out.printf("%20s", Month.values()[(startmonth * 3 + month) % 12].name());
+                    } else if (i == 1) {
+                        System.out.print("Mo Di Mi Do Fr Sa So  ");
+                    } else {
+                        printWeek(cal[i - 2]);
+                        System.out.print("  ");
+                    }
                 });
                 System.out.println();
             });
+            System.out.println();
         });
     }
 
