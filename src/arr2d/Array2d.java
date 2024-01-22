@@ -1,6 +1,5 @@
 package arr2d;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +13,10 @@ import java.util.stream.IntStream;
 public class Array2d {
     public static void main(String[] args) {
         testSudoku("sudokus.txt", "output.txt");
+        System.out.println("isMagicSquare(new int[][]{{4, 9, 2},{3, 5 ,7},{8, 1, 6}}) = " + isMagicSquare(new int[][]{{4, 9, 2}, {3, 5, 7}, {8, 1, 6}}));
+        printMonth(2024,1);
+        printYear(2024);
+        printSudoku(sudokuFromString("...........5....9...4....1.2....3.5....7.....438...2......9.....1.4...6.........."));
     }
 
     public static boolean isMagicSquare(int[][] s) {
@@ -45,8 +48,8 @@ public class Array2d {
 
     public static void printMonth(int year, int month) {
         LocalDate date = LocalDate.of(year, month, 1);
-        String headerFormat = "%" + ((21 - (Month.values()[date.getMonth().getValue()].name().length() + 5)) / 2 + Month.values()[date.getMonth().getValue()].name().length() + 5) + "s%n Mo Di Mi Do Fr Sa So%n";
-        System.out.printf(headerFormat, Month.values()[date.getMonth().getValue()].name() + " " + year);
+        String headerFormat = "%" + ((21 - (Month.values()[date.getMonth().getValue()-1].name().length() + 5)) / 2 + Month.values()[date.getMonth().getValue()-1].name().length() + 5) + "s%n Mo Di Mi Do Fr Sa So%n";
+        System.out.printf(headerFormat, Month.values()[date.getMonth().getValue()-1].name() + " " + year);
         Arrays.stream(getCalendarOfMonth(year, month)).forEach(week -> {
             printWeek(week);
             System.out.println();
@@ -124,7 +127,7 @@ public class Array2d {
     }
 
     public static void testSudoku(String in, String out) {
-        try (FileOutputStream oFile = new FileOutputStream(new File(out))) {
+        try (FileOutputStream oFile = new FileOutputStream(out)) {
             Object[] sudokuObjects = Files.readAllLines(Path.of(in)).toArray();
             StringBuilder judged = new StringBuilder();
             for (Object obj : sudokuObjects) {
