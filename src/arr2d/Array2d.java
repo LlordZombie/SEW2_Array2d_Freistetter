@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 public class Array2d {
     public static void main(String[] args) {
-        testSudoku("sudokus.txt","output.txt");
+        testSudoku("sudokus.txt", "output.txt");
     }
 
     public static boolean isMagicSquare(int[][] s) {
@@ -124,29 +124,18 @@ public class Array2d {
     }
 
     public static void testSudoku(String in, String out) {
-        File o = new File(out);
-        try {
-            o.createNewFile();
+        try (FileOutputStream oFile = new FileOutputStream(new File(out))) {
+            Object[] sudokuObjects = Files.readAllLines(Path.of(in)).toArray();
+            StringBuilder judged = new StringBuilder();
+            for (Object obj : sudokuObjects) {
+                String sudokuString = String.valueOf(obj);
+                boolean isValid = isValidSudoku(sudokuFromString(sudokuString));
+                judged.append(sudokuString).append(isValid ? ": gültig\n" : ": nicht gültig\n");
+            }
+            oFile.write(judged.toString().getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try (FileOutputStream oFile = new FileOutputStream(o)) {
-            Object[] sudokuObjects = Files.readAllLines(Path.of(in)).toArray();
-            String[] sudokus = new String[sudokuObjects.length];
-            StringBuilder judged = new StringBuilder();
-            for (int i = 0; i < sudokus.length; i++) {
-                if (isValidSudoku(sudokuFromString(String.valueOf(sudokuObjects[i])))) {
-                    judged.append(sudokuObjects[i]).append(": gültig\n");
-                } else {
-                    judged.append(sudokuObjects[i]).append(": nicht gültig\n");
-                }
-            }
-            oFile.write(judged.toString().getBytes());
-
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Path is not valid");
-        }
-
     }
 
     public static boolean isValidSudoku(int[][] s) {
