@@ -34,7 +34,6 @@ public class Array2d {
         int[] colSums = new int[size];
 
         boolean[] allowedNums = new boolean[s.length * s.length];
-        Arrays.fill(allowedNums, false);
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 int num = s[i][j];
@@ -48,9 +47,7 @@ public class Array2d {
                 colSums[j] += num;
             }
         }
-
         int referenceSum = diag1;
-
         return Arrays.stream(rowSums).allMatch(sum -> sum == referenceSum) && Arrays.stream(colSums).allMatch(sum -> sum == referenceSum) && diag2 == diag1;
     }
 
