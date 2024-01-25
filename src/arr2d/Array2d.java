@@ -7,8 +7,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Array2d {
@@ -22,7 +20,7 @@ public class Array2d {
 
     public static boolean isMagicSquare(int[][] s) {
         int size = s.length;
-        if (s.length==0){
+        if (s.length == 0) {
             return false;
         }
         if (s[0].length != size || Arrays.stream(s).anyMatch(row -> row.length != size)) return false;
@@ -35,17 +33,17 @@ public class Array2d {
         int[] rowSums = new int[size];
         int[] colSums = new int[size];
 
-        boolean[] allowedNums = new boolean[s.length*s.length];
+        boolean[] allowedNums = new boolean[s.length * s.length];
         Arrays.fill(allowedNums, false);
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 int num = s[i][j];
-               try {
-                   if (allowedNums[num-1]) return false;
-               }catch (ArrayIndexOutOfBoundsException e){
-                   return false;
-               }
-                allowedNums[num-1]=true;
+                try {
+                    if (allowedNums[num - 1]) return false;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    return false;
+                }
+                allowedNums[num - 1] = true;
                 rowSums[i] += num;
                 colSums[j] += num;
             }
@@ -53,7 +51,7 @@ public class Array2d {
 
         int referenceSum = diag1;
 
-        return Arrays.stream(rowSums).allMatch(sum -> sum == referenceSum) && Arrays.stream(colSums).allMatch(sum -> sum == referenceSum)&&diag2==diag1;
+        return Arrays.stream(rowSums).allMatch(sum -> sum == referenceSum) && Arrays.stream(colSums).allMatch(sum -> sum == referenceSum) && diag2 == diag1;
     }
 
     public static int[][] getCalendarOfMonth(int year, int month) {

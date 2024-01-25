@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.Arrays;
 
 class MagicSquareTest {
-    private static int bigMagicSqare[][];
+    private static int[][] bigMagicSqare;
 
     @BeforeAll
     static void generateBigMagicSquare() {
@@ -24,8 +24,8 @@ class MagicSquareTest {
     /**
      * Erzeugt ein magisches Quadrat.
      * Die Kantenlänge muss ungerade sein!
-     *
-     * Sourcecode-Quelle:https://stackoverflow.com/questions/36040292/creating-a-magic-square-in-java
+     * <p>
+     * Sourcecode-Quelle:<a href="https://stackoverflow.com/questions/36040292/creating-a-magic-square-in-java">...</a>
      *
      * @param s Kantenlänge
      * @param printMagicSquare gibt an, ob das Magische Quadrat auch ausgeruckt werden soll.
@@ -40,7 +40,7 @@ class MagicSquareTest {
         if (s <= 0) {
             throw new IllegalArgumentException("Die Kantenlänge muss größer gleich 1 sein, war aber: " + s);
         }
-        int magicSqr[][] = new int[s][s];
+        int[][] magicSqr = new int[s][s];
 
         int r = s / 2;
         int c = s - 1;
